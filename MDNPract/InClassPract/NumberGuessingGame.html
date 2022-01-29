@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        *{
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Guess The Number</h1>
+    <p style="text-align: center;">We have selected a random number between 1 and 100. See if you can guess it in 10 turns or fewer. We'll tell you if your guess was too high or too low.</p>
+    <input type="text" id="userGuess"/>
+    <button id="submit">Submit</button>
+    <p id="GuessRecorder"> </p>
+    <p id="successFail" display="none"></p>
+    <p id="highLow" diplay = "none"></p>
+    <script>
+        function reset(){
+            numberClicks = 0;
+            document.querySelector("#userGuess").disabled = false;
+            document.querySelector("#submit").disabled = false;
+            document.querySelector("#successFail").innerHTML = "";
+            document.querySelector("#highLow").innerHTML = "";
+            document.querySelector("#GuessRecorder").innerHTML = "";
+            document.querySelector("#userGuess").focus();
+            document.querySelector("#userGuess").value = "";
+        }
+        let randomNumber;
+        let numberClicks = 0;
+        
+        document.querySelector("#userGuess").focus();
+        document.querySelector("button").addEventListener("click", ()=> {
+            let playerNumber = Number(document.querySelector("#userGuess").value);
+            if(numberClicks == 0)    randomNumber = Math.floor(Math.random() * 100 + 1);
+            console.log(randomNumber);
+            if(numberClicks < 10)  {
+                document.querySelector("#GuessRecorder").textContent += ` ${playerNumber}`;
+                if(playerNumber == randomNumber)    {                    
+                    let para = document.querySelector("#successFail");
+                    para.textContent = "Congratulations you guessed the correct answer."
+                    para.style.backgroundColor = "green";
+                    para.style.display = "block";
+                    document.querySelector("#userGuess").disabled = true;
+                    document.querySelector("#submit").disabled = true;
+                    let button = document.createElement("button");
+                    button.textContent = "Restart";
+                    button.onclick = ()=>{
+                        reset()
+                        button.remove();
+                    };  
+                    document.querySelector("body").appendChild(button);
+
+                }   else if(playerNumber != randomNumber)   {
+                        let para = document.querySelector("#successFail");
+                        para.textContent = "You guessed it wrong."
+                        para.style.backgroundColor = "red";
+                        para.style.display = "block";
+                        document.querySelector("#userGuess").value = "";
+                        document.querySelector("#userGuess").focus();
+                        if(playerNumber < randomNumber) {
+                            let para = document.querySelector("#highLow");
+                            para.textContent = "Your guess was too low."
+                            para.style.display = "block";
+                        }   else {
+                            let para = document.querySelector("#highLow");
+                            para.textContent = "Your guess was too high."
+                            para.style.display = "block";
+                        }
+                        numberClicks++;
+                }
+            }   else    {
+                    document.querySelector("#userGuess").disabled = true;
+                    document.querySelector("#submit").disabled = true;
+                    let button = document.createElement("button");
+                    button.textContent = "Restart";
+                    button.id = "reset";
+                    button.onclick = ()=>{
+                        reset()                        
+                        button.remove();
+                    };                     
+                    document.querySelector("body").appendChild(button);
+            }
+            
+        });
+    </script>
+</body>
+</html>
